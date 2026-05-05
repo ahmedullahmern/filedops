@@ -5,7 +5,7 @@ export const jobValidationSchema = Joi.object({
 
     technicianId: Joi.string().hex().length(24).optional(),
 
-    problem: Joi.string().trim().min(3).required(),
+    description: Joi.string().trim().min(3).required(),
 
     title: Joi.string().trim().min(3).required(),
 

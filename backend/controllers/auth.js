@@ -92,25 +92,25 @@ export { authControllers, loginControllers, deleteUserControllers }
 // models/auth.js mein add karo:
 // import Job from './job.js'
 
-userSchema.pre('findOneAndDelete', async function(next) {
-    try {
-        const user = await this.model.findOne(this.getFilter())
+// userSchema.pre('findOneAndDelete', async function(next) {
+//     try {
+//         const user = await this.model.findOne(this.getFilter())
         
-        if (user && user.role === 'technician') {
-            // Us technician ki saari active jobs ko unassign karo
-            await Job.updateMany(
-                { 
-                    technicianId: user._id,
-                    status: { $in: ["assigned", "in-progress"] }
-                },
-                { 
-                    technicianId: null,
-                    status: "pending"  // Wapas pending pe aa jaye
-                }
-            )
-        }
-        next()
-    } catch (error) {
-        next(error)
-    }
-})
+//         if (user && user.role === 'technician') {
+//             // Us technician ki saari active jobs ko unassign karo
+//             await Job.updateMany(
+//                 { 
+//                     technicianId: user._id,
+//                     status: { $in: ["assigned", "in-progress"] }
+//                 },
+//                 { 
+//                     technicianId: null,
+//                     status: "pending"  // Wapas pending pe aa jaye
+//                 }
+//             )
+//         }
+//         next()
+//     } catch (error) {
+//         next(error)
+//     }
+// })
