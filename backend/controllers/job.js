@@ -81,9 +81,10 @@ const getAlljob = async (req, res) => {
 
 const updateStatus = async (req, res) => {
     try {
+        const userId = req.user._id || req.user.id
         const job = await Job.findOne({
             _id: req.params.id,
-            technicianId: req.user._id
+            technicianId: userId
         })
         if (!job) {
             return sendResponse(res, 403, null, true, "Not your job")
@@ -93,6 +94,28 @@ const updateStatus = async (req, res) => {
         sendResponse(res, 200, job, false, "Status Updated")
     } catch (error) {
         console.log("error-->", error)
+        sendResponse(res, 400, null, true, error.message)
+    }
+}
+
+const addNoteControllers = async (req, res) => {
+    try {
+        const userId = req.user._id || req.user.id
+        const job = await Job.findByIdAndUpdate(
+            req.params.id,
+            {
+                $push: {
+                    notes: {
+                        text: req.body.text,
+                        addedBy: userId
+                    }
+                }
+            },
+            { new: true }
+        )
+        if (!job) return sendResponse(res, 404, null, true, "Job not found")
+        sendResponse(res, 200, job, false, "Note Added")
+    } catch (error) {
         sendResponse(res, 400, null, true, error.message)
     }
 }
@@ -111,4 +134,4 @@ const clientJobs = async (req, res) => {
 
 }
 
-export { getAlljob, createJob, assignTechnician, myJobs, updateStatus, clientJobs }
+export {addNoteControllers, getAlljob, createJob, assignTechnician, myJobs, updateStatus, clientJobs }

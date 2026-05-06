@@ -1,7 +1,7 @@
 import express from 'express'
 import { authControllers, loginControllers } from '../controllers/auth.js'
-import { authenticationAdmin, authenticationClient, authenticationTechnician } from '../middleware/authVerfy.js'
-import { assignTechnician, clientJobs, createJob, getAlljob, myJobs, updateStatus } from '../controllers/job.js'
+import { anyAuthMiddleware, authenticationAdmin, authenticationClient, authenticationTechnician } from '../middleware/authVerfy.js'
+import { addNoteControllers, assignTechnician, clientJobs, createJob, getAlljob, myJobs, updateStatus } from '../controllers/job.js'
 
 const jobRouter = express.Router()
 
@@ -11,5 +11,6 @@ jobRouter.put('/adminassignedstatus/:id', authenticationAdmin, assignTechnician)
 jobRouter.get('/gettechnician', authenticationTechnician, myJobs)
 jobRouter.put('/technicainupdatedstatus/:id', authenticationTechnician, updateStatus)
 jobRouter.get('/getclientstatus', authenticationClient, clientJobs)
+jobRouter.post('/addnote/:id', anyAuthMiddleware,addNoteControllers)
 
 export default jobRouter

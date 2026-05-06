@@ -84,7 +84,15 @@ const deleteUserControllers = async (req, res) => {
     }
 }
 
-export { authControllers, loginControllers, deleteUserControllers }
+const getAllUsersControllers = async (req, res) => {
+    try {
+        const users = await User.find().select('-password')
+        sendResponse(res, 200, users, false, "All Users Fetched")
+    } catch (error) {
+        sendResponse(res, 400, null, true, error.message)
+    }
+}
+export {getAllUsersControllers, authControllers, loginControllers, deleteUserControllers }
 
 
 

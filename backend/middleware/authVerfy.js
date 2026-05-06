@@ -1,5 +1,5 @@
 import ENV from '../constant/index.js'
-import jwt from 'jsonwebtoken'
+import jwt, { decode } from 'jsonwebtoken'
 import sendResponse from '../constant/sendRespose.js'
 import User from '../models/auth.js'
 
@@ -10,6 +10,7 @@ export async function authenticationAdmin(req, res, next) {
 
         const token = bearerToken?.split(" ")[1]
         const decoded = jwt.verify(token, ENV.AUTH_SECRET)
+        console.log("decoded-->", decode)
         if (!decoded) return sendResponse(res, 403, null, true, "Worng Token")
         req.user = decoded
         if (decoded.role == "admin") {
@@ -72,7 +73,7 @@ export async function anyAuthMiddleware(req, res, next) {
         if (!token) return sendResponse(res, 403, null, true, "Token not Provide")
         const decoded = jwt.verify(token, process.env.AUTH_SECRET)
         if (decoded) {
-            const user = await User.findById(decoded._id)
+            const user = await User.findById(decoded.id)
             if (!user) {
                 return sendResponse(res, 403, null, true, "User Not Found")
             }
